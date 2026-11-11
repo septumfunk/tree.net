@@ -11,6 +11,13 @@ public static class Tree
 {
     private const int INDENT_BY = 2;
 
+    private static string GetName(Item item)
+        => item switch
+        {
+            File f => f.Name,
+            Directory d => d.Name,
+        };
+
     private static Directory? OpenDir(string path)
     {
         if (!System.IO.Directory.Exists(path))
@@ -31,6 +38,9 @@ public static class Tree
                 dir.Children.Add(new(new File(item.Name)));
         }
 
+        // Alphabetical sort
+        dir.Children.Sort((i1, i2) =>
+            StringComparer.OrdinalIgnoreCase.Compare(GetName(i1), GetName(i2)));
         return dir;
     }
 
